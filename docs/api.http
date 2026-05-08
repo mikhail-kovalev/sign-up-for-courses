@@ -1,0 +1,74 @@
+@host = http://localhost:8080
+@token =
+
+### Health
+GET {{host}}/health
+
+### Register
+POST {{host}}/auth/register
+Content-Type: application/json
+
+{
+  "fullName": "Иван Петров",
+  "email": "ivan.petrov@example.ru",
+  "password": "student123"
+}
+
+### Login
+POST {{host}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "student@oborg.ru",
+  "password": "student123"
+}
+
+### Current user
+GET {{host}}/users/me
+Authorization: Bearer {{token}}
+
+### Change password
+POST {{host}}/users/me/password
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "currentPassword": "student123",
+  "newPassword": "student1234"
+}
+
+### Courses
+GET {{host}}/courses
+
+### Course details
+GET {{host}}/courses/1
+
+### Course reviews
+GET {{host}}/courses/1/reviews
+
+### Enroll
+POST {{host}}/courses/1/enroll
+Authorization: Bearer {{token}}
+
+### Create review
+POST {{host}}/courses/1/reviews
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "rating": 5,
+  "text": "Понравилась практическая структура курса и понятные примеры."
+}
+
+### My enrollments
+GET {{host}}/enrollments
+Authorization: Bearer {{token}}
+
+### Support request
+POST {{host}}/support-requests
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "message": "Подскажите, пожалуйста, когда появится расписание занятий?"
+}

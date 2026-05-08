@@ -1,0 +1,21 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: oborg-courses-db
+    environment:
+      POSTGRES_DB: oborg_courses
+      POSTGRES_USER: oborg
+      POSTGRES_PASSWORD: oborg
+    ports:
+      - "5432:5432"
+    volumes:
+      - oborg_courses_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U oborg -d oborg_courses"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  oborg_courses_data:
+
