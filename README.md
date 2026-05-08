@@ -172,23 +172,3 @@ server/src/main/kotlin/ru/oborg/courses/server
 ```powershell
 .\gradlew.bat -p server build
 ```
-
-Если отдельная сборка сервера подхватывает неподходящую Java, можно явно указать JBR из Android Studio:
-
-```powershell
-$env:JAVA_HOME="D:\Program Files\Android Studio\jbr"
-.\gradlew.bat -p server build
-```
-
-## Что не нужно прикладывать к сдаче
-
-При передаче проекта не нужны служебные и сгенерированные папки:
-
-- `.gradle`
-- `.idea`
-- `.kotlin`
-- `build`
-- `app/build`
-- `server/build`
-- `logs`
-- `local.properties`
