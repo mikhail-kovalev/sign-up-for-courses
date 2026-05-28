@@ -78,7 +78,7 @@ fun Course.learningProgress(): Int {
 }
 
 fun Course.ratingValue(): Float {
-    return 4.6f + ((id * 7 + seatsTotal) % 4) / 10f
+    return averageRating?.toFloat() ?: 0f
 }
 
 fun Course.ratingText(): String {
@@ -86,7 +86,7 @@ fun Course.ratingText(): String {
 }
 
 fun Course.reviewsCount(): Int {
-    return 86 + id * 37 + seatsBusy * 2
+    return reviewCount
 }
 
 fun Course.nextLessonTime(): String {

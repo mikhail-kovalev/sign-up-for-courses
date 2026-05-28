@@ -12,9 +12,10 @@ data class Course(
     val level: String,
     val startsAt: String,
     val seatsTotal: Int,
-    val seatsBusy: Int
+    val seatsBusy: Int,
+    val averageRating: Double?,
+    val reviewCount: Int
 ) {
     val seatsLeft: Int
         get() = max(0, seatsTotal - seatsBusy)
 }
-

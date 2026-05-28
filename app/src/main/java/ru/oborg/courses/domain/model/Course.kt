@@ -11,6 +11,7 @@ data class Course(
     val startsAt: String,
     val seatsTotal: Int,
     val seatsBusy: Int,
-    val seatsLeft: Int
+    val seatsLeft: Int,
+    val averageRating: Double?,
+    val reviewCount: Int
 )
-

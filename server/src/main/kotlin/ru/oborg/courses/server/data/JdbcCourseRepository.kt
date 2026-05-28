@@ -62,10 +62,13 @@ class JdbcCourseRepository(
                            c.level,
                            c.starts_at,
                            c.seats_total,
-                           COUNT(all_e.id) AS seats_busy
+                           COUNT(DISTINCT all_e.id) AS seats_busy,
+                           AVG(r.rating)::double precision AS average_rating,
+                           COUNT(DISTINCT r.id)::int AS review_count
                     FROM enrollments e
                     JOIN courses c ON c.id = e.course_id
                     LEFT JOIN enrollments all_e ON all_e.course_id = c.id
+                    LEFT JOIN course_reviews r ON r.course_id = c.id
                     WHERE e.user_id = ?
                     GROUP BY e.id, e.created_at, c.id, c.title, c.description, c.teacher,
                              c.duration_hours, c.price_rub, c.level, c.starts_at, c.seats_total
@@ -340,10 +343,13 @@ class JdbcCourseRepository(
                        c.level,
                        c.starts_at,
                        c.seats_total,
-                       COUNT(all_e.id) AS seats_busy
+                       COUNT(DISTINCT all_e.id) AS seats_busy,
+                       AVG(r.rating)::double precision AS average_rating,
+                       COUNT(DISTINCT r.id)::int AS review_count
                 FROM enrollments e
                 JOIN courses c ON c.id = e.course_id
                 LEFT JOIN enrollments all_e ON all_e.course_id = c.id
+                LEFT JOIN course_reviews r ON r.course_id = c.id
                 WHERE e.id = ?
                 GROUP BY e.id, e.created_at, c.id, c.title, c.description, c.teacher,
                          c.duration_hours, c.price_rub, c.level, c.starts_at, c.seats_total
@@ -452,8 +458,15 @@ class JdbcCourseRepository(
             level = getString("level"),
             startsAt = getDate("starts_at").toLocalDate().toString(),
             seatsTotal = getInt("seats_total"),
-            seatsBusy = getInt("seats_busy")
+            seatsBusy = getInt("seats_busy"),
+            averageRating = getNullableDouble("average_rating"),
+            reviewCount = getInt("review_count")
         )
+    }
+
+    private fun ResultSet.getNullableDouble(columnLabel: String): Double? {
+        val value = getDouble(columnLabel)
+        return if (wasNull()) null else value
     }
 
     private fun ResultSet.toCourseReview(): CourseReview {
@@ -484,9 +497,12 @@ class JdbcCourseRepository(
                    c.level,
                    c.starts_at,
                    c.seats_total,
-                   COUNT(e.id) AS seats_busy
+                   COUNT(DISTINCT e.id) AS seats_busy,
+                   AVG(r.rating)::double precision AS average_rating,
+                   COUNT(DISTINCT r.id)::int AS review_count
             FROM courses c
             LEFT JOIN enrollments e ON e.course_id = c.id
+            LEFT JOIN course_reviews r ON r.course_id = c.id
             GROUP BY c.id, c.title, c.description, c.teacher,
                      c.duration_hours, c.price_rub, c.level, c.starts_at, c.seats_total
         """.trimIndent()

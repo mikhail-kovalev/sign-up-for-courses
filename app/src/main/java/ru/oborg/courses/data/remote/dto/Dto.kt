@@ -58,7 +58,9 @@ data class CourseResponseDto(
     val startsAt: String,
     val seatsTotal: Int,
     val seatsBusy: Int,
-    val seatsLeft: Int
+    val seatsLeft: Int,
+    val averageRating: Double?,
+    val reviewCount: Int
 )
 
 @Serializable
@@ -124,7 +126,9 @@ fun CourseResponseDto.toDomain(): Course {
         startsAt = startsAt,
         seatsTotal = seatsTotal,
         seatsBusy = seatsBusy,
-        seatsLeft = seatsLeft
+        seatsLeft = seatsLeft,
+        averageRating = averageRating,
+        reviewCount = reviewCount
     )
 }
 
